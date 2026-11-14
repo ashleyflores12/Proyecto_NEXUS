@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto NEXUS</title>
+    <!-- Importar tipografías de Google Fonts: Orbitron y Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-negro: #080B0F;
+            --color-gris-oscuro: #2A2A3A;
+            --color-morado: #8A2BE2;
+            --color-rosa: #FF2D95;
+            --color-azul: #00f0ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-negro);
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Tipografía de títulos */
+        h1, h2, h3, .logo {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Menú Superior */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(8, 11, 15, 0.95);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            z-index: 1000;
+            border-bottom: 2px solid var(--color-morado);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            color: var(--color-rosa);
+            font-weight: 900;
+            text-shadow: 0 0 10px var(--color-rosa);
+        }
+
+        nav.menu a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav.menu a:hover {
+            color: var(--color-azul);
+            text-shadow: 0 0 8px var(--color-azul);
+        }
+
+        /* Sección de Inicio / Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            /* Imagen de la ciudad cyberpunk de tu captura */
+            background: linear-gradient(rgba(8,11,15,0.7), rgba(8,11,15,0.9)), url('https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1400&q=80') no-repeat center center/cover;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--color-azul);
+            text-shadow: 0 0 15px var(--color-azul);
+            margin-bottom: 10px;
+        }
+
+        .subtitulo {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #ccc;
+        }
+
+        .btn-comenzar {
+            background-color: var(--color-rosa);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--color-rosa);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-comenzar:hover {
+            transform: scale(1.05);
+            background-color: #ff4da6;
+        }
+
+        /* Contenedor Principal de Escenas */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .escena-card {
+            background-color: var(--color-gris-oscuro);
+            border: 2px solid var(--color-morado);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 50px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .escena-card h2 {
+            color: var(--color-azul);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .escena-card p {
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .escena-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--color-morado);
+        }
+
+        /* Caja de Interacción JavaScript */
+        .interaccion-box {
+            background-color: rgba(8, 11, 15, 0.6);
+            border: 1px dashed var(--color-rosa);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .interaccion-box h3 {
+            color: var(--color-rosa);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        #btnRevelar {
+            background-color: var(--color-morado);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            margin-top: 10px;
+            box-shadow: 0 0 10px var(--color-morado);
+            transition: background 0.3s;
+        }
+
+        #btnRevelar:hover {
+            background-color: #9d4edd;
+        }
+
+        /* Estado inicial CERRADO para abrir y cerrar suavemente */
+        .mensaje-secreto {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            margin-top: 0;
+            padding: 0 10px;
+            background-color: rgba(0, 240, 255, 0.1);
+            border-left: 4px solid var(--color-azul);
+            color: var(--color-azul);
+            text-align: left;
+            border-radius: 4px;
+        }
+
+        /* Estado ABIERTO con la clase .activo */
+        .mensaje-secreto.activo {
+            max-height: 150px;
+            opacity: 1;
+            margin-top: 15px;
+            padding: 10px;
+        }
+
+        /* Botones de Navegación entre Escenas */
+        .navegacion-escenas {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-nav {
+            background-color: transparent;
+            border: 1px solid var(--color-azul);
+            color: var(--color-azul);
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--color-azul);
+            color: var(--color-negro);
+            box-shadow: 0 0 10px var(--color-azul);
+        }
+
+        .creditos {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #bbb;
+            border-top: 1px solid #444;
+            padding-top: 10px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--color-negro);
+            border-top: 1px solid var(--color-gris-oscuro);
+            color: #777;
+            font-size: 0.85rem;
+        }
+
+        /* Diseño adaptable (Responsive) para móviles */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            nav.menu {
+                display: none;
+            }
+            header {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú de navegación superior -->
+    <header>
+        <div class="logo">PROYECTO NEXUS</div>
+        <nav class="menu">
+            <a href="#inicio">Inicio</a>
+            <a href="#escena1">Escena 1</a>
+            <a href="#escena2">Escena 2</a>
+            <a href="#escena3">Escena 3</a>
+            <a href="#escena4">Escena 4</a>
+            <a href="#escena5">Final</a>
+        </nav>
+    </header>
+
+    <!-- Sección de Inicio -->
+    <section id="inicio" class="hero">
+        <h1>PROYECTO NEXUS</h1>
+        <p class="subtitulo">Una historia donde la tecnología y la humanidad se encuentran en Neo-Tok.</p>
+        <a href="#escena1" class="btn-comenzar">Comenzar historia</a>
+    </section>
+
+    <main class="container">
+        
+        <!-- Escena 1 -->
+        <section id="escena1" class="escena-card">
+            <h2>Escena 1: El mensaje</h2>
+            <p>Lily recibe una misteriosa señal en su dispositivo con una ubicación y un código desconocido[cite: 3].</p>
+            <!-- Imagen de la hacker frente a las pantallas (exacta de tu captura) -->
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Hacker en ciudad futurista">
+            
+            <!-- Interacción JavaScript para abrir y cerrar -->
+            <div class="interaccion-box">
+                <h3>Interacción JavaScript</h3>
+                <p>¿Quieres descubrir el mensaje secreto?</p>
+                <button id="btnRevelar" onclick="revelarCodigo()">Revelar código</button>
+                <div id="mensajeSecreto" class="mensaje-secreto">
+                    <p><strong>MENSAJE OCULTO:</strong> Código de acceso: 7-3-1-9</p>
+                </div>
+            </div>
+
+            <div class="navegacion-escenas">
+                <a href="#inicio" class="btn-nav">Anterior</a>
+                <a href="#escena2" class="btn-nav">Siguiente</a>
+            </div>
+        </section>
+
+        <!-- Escena 2 -->
+        <section id="escena2" class="escena-card">
+            <h2>Escena 2: La ciudad oculta</h2>
+            <p>Siguiendo las instrucciones, Lily descubre una zona secreta de Neo-Tok llena de edificios gigantes y tecnología oscura[cite: 3, 4].</p>
+            <!-- Imagen de la ciudad cyberpunk nocturna -->
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80" alt="Ciudad Neo-Tok">
+            <div class="navegacion-escenas">
+                <a href="#escena1" class="btn-nav">Anterior</a>
+                <a href="#escena3" class="btn-nav">Siguiente</a>
+            </div>
+        </section>
+
+        <!-- Escena 3 -->
+        <section id="escena3" class="escena-card">
+            <h2>Escena 3: El sistema</h2>
+            <p>Lily y su compañera la inteligencia artificial Zyn investigan el programa que busca controlar los recuerdos y decisiones de los habitantes[cite: 2, 3, 4].</p>
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80" alt="Inteligencia Artificial Zyn">
+            <div class="navegacion-escenas">
+                <a href="#escena2" class="btn-nav">Anterior</a>
+                <a href="#escena4" class="btn-nav">Siguiente</a>
+            </div>
+        </section>
+
+        <!-- Escena 4 -->
+        <section id="escena4" class="escena-card">
+            <h2>Escena 4: La verdad</h2>
+            <p>Descubren los planes del Creador y la verdadera intención detrás del sistema principal[cite: 2, 4].</p>
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Misterio tecnológico">
+            <div class="navegacion-escenas">
+                <a href="#escena3" class="btn-nav">Anterior</a>
+                <a href="#escena5" class="btn-nav">Siguiente</a>
+            </div>
+        </section>
+
+        <!-- Escena 5 / Final -->
+        <section id="escena5" class="escena-card">
+            <h2>Escena 5: El legado</h2>
+            <p>Lily logra detener el programa. Finalmente, debe tomar una decisión crucial que cambiará el futuro y la libertad de los habitantes de Neo-Tok[cite: 3, 4].</p>
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Futuro de Neo-Tok">
+            
+            <div class="creditos">
+                <p><strong>Autora:</strong> Ashley Lisseth Flores (Sección 10-3)[cite: 1]</p>
+                <p>Subárea: Programación Web | CTP de Educación Comercial y Servicios[cite: 1]</p>
+            </div>
+
+            <div class="navegacion-escenas">
+                <a href="#escena4" class="btn-nav">Anterior</a>
+                <a href="#inicio" class="btn-nav">Volver al inicio</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - Proyecto NEXUS | Cuento Web Interactivo</p>
+    </footer>
+
+    <!-- Código de JavaScript para la interacción de abrir y cerrar -->
+    <script>
+        function revelarCodigo() {
+            const mensajeOculto = document.getElementById("mensajeSecreto");
+            mensajeOculto.classList.toggle("activo");
+        }
+    </script>
+</body>
+</html>
